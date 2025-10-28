@@ -1,16 +1,29 @@
 // Node server which will handle socket io connections
 // server.js
 
-const PORT = process.env.PORT || 8000;
-const io = require('socket.io')(PORT, {
+const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
+
+const app = express();
+const server = http.createServer(app);
+
+const io = new Server(server, {
   cors: {
     origin: "*",
     methods: ["GET", "POST"]
   }
 });
 
+const PORT = process.env.PORT || 8000;
+
+
 const users = {};
 const roomMessages = {};
+
+app.get('/', (req, res) => {
+  res.send("🚀 Wassup Chat Server is running!");
+});
 
 io.on('connection', socket => {
   console.log("[SERVER] A new client connected:", socket.id);
@@ -102,3 +115,7 @@ function getAllUsers() {
   for (const id in users) list.push({ id, name: users[id].name });
   return list;
 }
+
+server.listen(PORT, () => {
+  console.log(`[SERVER] Running on port ${PORT}`);
+});
