@@ -1,0 +1,392 @@
+/* === Wassup! Discord AMOLED Theme (Enhanced + Username Colors + Transition) === */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+* {
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
+}
+
+body {
+  height: 100vh;
+  background-color: #000;
+  color: #e4e6eb;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* === NAVBAR === */
+nav {
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #222;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.6);
+}
+
+nav h1 {
+  color: #e4e6eb;
+  font-size: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.logo {
+  width: 42px;
+  height: 42px;
+}
+
+/* === THEME TOGGLE === */
+#theme-toggle {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: #111;
+  color: #ccc;
+  border: none;
+  border-radius: 50%;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background 0.2s, color 0.2s, transform 0.3s ease;
+  z-index: 20;
+}
+#theme-toggle:hover {
+  background: #202225;
+  color: #fff;
+  transform: rotate(20deg);
+}
+
+/* === USER LIST === */
+#users-list {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  width: 220px;
+  background: #0a0a0a;
+  border-right: 1px solid #1f1f1f;
+  height: calc(100vh - 80px);
+  padding: 15px;
+  overflow-y: auto;
+  transition: all 0.3s ease;
+}
+
+#users-list h3 {
+  color: #7289da;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+#usernames li {
+  list-style: none;
+  padding: 6px 8px;
+  border-radius: 6px;
+  margin-bottom: 4px;
+  background: transparent;
+  transition: background 0.2s;
+  cursor: pointer;
+  color: #d1d5db;
+  font-weight: 500;
+}
+
+#usernames li:hover {
+  background: #1e1e1e;
+  color: #fff;
+}
+
+/* === USERNAME COLORS === */
+.username {
+  font-weight: 600;
+  margin-right: 5px;
+}
+
+/* Discord-style name colors */
+.username.color-1 { color: #e91e63; }  /* pink */
+.username.color-2 { color: #9c27b0; }  /* purple */
+.username.color-3 { color: #3f51b5; }  /* blue */
+.username.color-4 { color: #03a9f4; }  /* light blue */
+.username.color-5 { color: #4caf50; }  /* green */
+.username.color-6 { color: #ff9800; }  /* orange */
+.username.color-7 { color: #f44336; }  /* red */
+.username.color-8 { color: #00bcd4; }  /* cyan */
+.username.color-9 { color: #8bc34a; }  /* lime */
+.username.color-10 { color: #cddc39; } /* yellow */
+
+:root {
+  --bg-primary: #f5f6fa;
+  --bg-secondary: #ffffff;
+  --text-color: #1e1e1e;
+  --border-color: #dcdcdc;
+  --accent: #5865f2;
+  --accent-hover: #4752c4;
+  --input-bg: #fff;
+}
+
+body.dark-mode {
+  --bg-primary: #0d0d0d;
+  --bg-secondary: #1a1a1a;
+  --text-color: #e6e6e6;
+  --border-color: #333;
+  --accent: #7289da;
+  --accent-hover: #5b6eae;
+  --input-bg: #2a2a2a;
+}
+
+
+/* === MODAL === */
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+  transition: background 0.3s ease;
+}
+
+.modal-content {
+  background: #111;
+  color: #eee;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid #333;
+  width: 300px;
+}
+
+.modal-content h2 {
+  margin-bottom: 10px;
+  color: #7289da;
+}
+
+#username {
+  width: 90%;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  outline: none;
+  font-size: 16px;
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+#join-btn {
+  background: #5865f2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+#join-btn:hover {
+  background: #4752c4;
+}
+
+/* === CHAT AREA === */
+.container {
+  margin-left: 240px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #0a0a0a;
+  border-radius: 10px;
+  border: 1px solid #1a1a1a;
+  margin-top: 15px;
+  margin-right: 15px;
+  padding: 20px;
+  height: 65vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #333 #000;
+  transition: background 0.3s ease;
+}
+.container::-webkit-scrollbar { width: 6px; }
+.container::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+/* === MESSAGES === */
+.message {
+  padding: 10px 14px;
+  margin: 8px 0;
+  border-radius: 10px;
+  max-width: 70%;
+  font-size: 15px;
+  word-wrap: break-word;
+  line-height: 1.4;
+}
+
+.message.center {
+  text-align: center;
+  font-style: italic;
+  color: #9ca3af; /* gray-400 */
+  font-size: 13px;
+  opacity: 0.85;
+  margin: 8px 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.message.left {
+  background: #1e1e1e;
+  color: #e0e0e0;
+  align-self: flex-start;
+  border-top-left-radius: 0;
+  box-shadow: 0 0 8px rgba(50,50,50,0.3);
+}
+
+.message.right {
+  background: #4752c4;
+  color: #fff;
+  align-self: flex-end;
+  border-top-right-radius: 0;
+  box-shadow: 0 0 10px rgba(88,101,242,0.5);
+}
+
+/* === LIGHT MODE === */
+body:not(.dark-mode) {
+  background: #f2f3f5;
+  color: #1e2124;
+}
+
+body:not(.dark-mode) nav {
+  background: #ffffff;
+  border-bottom: 1px solid #dcdfe3;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+body:not(.dark-mode) .container {
+  background: #f8f9fb;
+  border: 1px solid #dcdfe3;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+}
+body:not(.dark-mode) .message.left {
+  background: #dde3ee;
+  color: #1a1a1a;
+}
+body:not(.dark-mode) .message.right {
+  background: #0078ff;
+  color: #fff;
+}
+
+/* === SEND BAR === */
+.send {
+  margin-left: 240px;
+  width: calc(100% - 260px);
+  background: #111;
+  border-top: 1px solid #222;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+body:not(.dark-mode) .send {
+  background: #fff;
+  border-top: 1px solid #ddd;
+}
+
+.username {
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+#send-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 6px;
+  gap: 2px;
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+}
+
+#messageInp {
+  flex: 1;
+  padding: 5px 10px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  outline: none;
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  min-height: 48px; /* ⬅️ increased height */
+}
+
+
+#messageInp:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 4px var(--accent);
+}
+
+#send-container button {
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+#send-container button:hover {
+  background-color: var(--accent-hover);
+}
+
+/* === USER LIST (Dynamic Theme) === */
+#users-list, #online-users {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  width: 220px;
+  background-color: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  height: calc(100vh - 80px);
+  padding: 15px;
+  overflow-y: auto;
+  transition: all 0.3s ease;
+  color: var(--text-color);
+}
+
+#users-list h3, #online-users h3 {
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+#usernames li {
+  list-style: none;
+  padding: 6px 8px;
+  border-radius: 6px;
+  margin-bottom: 4px;
+  background: transparent;
+  transition: background 0.2s;
+  cursor: pointer;
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.user-list li:hover {
+  background-color: var(--accent);
+  color: #fff;
+}
+
+.message.center {
+  text-align: center;
+  font-style: italic;
+  color: gray;
+  font-size: 13px;
+  opacity: 0.8;
+  margin: 5px 0;
+}

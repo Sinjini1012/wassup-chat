@@ -1,0 +1,55 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wassup!</title>
+    <!-- <script defer src="http://localhost:8000/socket.io/socket.io.js"></script> -->
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script defer src = "js/client.js"></script>
+    <link rel = "stylesheet" href = "css/style.css">
+</head>
+<body>
+    <button id="theme-toggle">🌙</button>
+    <nav>
+        <img class = "logo" src = "chatlogo.png" alt = "">
+        <h1>Wassup!</h1>
+    </nav>
+    <div id="users-list">
+    <h3>Online Users</h3>
+    <ul id="usernames"></ul>
+    </div>
+
+    <!-- Username modal -->
+    <div id="name-modal" class="modal">
+    <div class="modal-content">
+        <h2>Enter your name</h2>
+        <input type="text" id="username" placeholder="Your name">
+        <button id="join-btn">Join Chat</button>
+    </div>
+    </div>
+
+    <div class = "container">
+        <!-- <div class = "message right">Sinjini: Hey! How are you?</div>
+        <div class = "message left">Sri: I am fine.</div>  -->
+    </div>
+    <select id="room-select">
+    <option value="general">General</option>
+    <option value="tech">Tech Talk</option>
+    <option value="fun">Fun Zone</option>
+    </select>
+    <button id="backToRoom" style="display:none;">⬅ Back to Room</button>
+    <div class="send">
+        <form action="#" id="send-container">
+            <input type="text" name="messageInp" id="messageInp">
+            <!-- <input type="file" id="imageInput" accept="image/*"> -->
+            <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.zip,.txt">
+            <button id="emoji-btn" type="button">😊</button>
+            <div id="emoji-picker" style="display:none; position:absolute; bottom:70px; background:#fff; border:1px solid #ccc; padding:5px; border-radius:10px;"></div>
+            <button class="btn" type="submit">Send</button>
+        </form>
+    </div>
+</body>
+</html>
