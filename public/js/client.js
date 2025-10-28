@@ -4,7 +4,7 @@ let privateTarget = null;
 let inPrivateChat = false;
 
 const userColors = {};
-const socket = io();
+const socket = io("https://wassup-chat.onrender.com");
 
 function getColor(name) {
   if (!userColors[name]) {
