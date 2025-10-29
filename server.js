@@ -44,7 +44,7 @@ io.on("connection", (socket) => {
     roomMessages[room].push({ name: user.name, message: `[file] ${data.fileName}` });
     if (roomMessages[room].length > 20) roomMessages[room].shift();
 
-    io.to(room).emit("file", {
+    socket.broadcast.to(room).emit("file", {
       file: data.file,
       fileName: data.fileName,
       fileType: data.fileType,
