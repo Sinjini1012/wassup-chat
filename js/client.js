@@ -81,56 +81,39 @@ const append = (message, position) => {
 
 fileInput.addEventListener('change', () => {
   const file = fileInput.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const fileData = {
-        file: reader.result,
-        fileName: file.name,
-        fileType: file.type,
-        name: Name,
-        room: currentRoom
-      };
-      console.log("[CLIENT] Sending file:", fileData.fileName, fileData.fileType);
-      
-      // ✅ Show your own file immediately
-      const msgDiv = document.createElement('div');
-      msgDiv.classList.add('message', 'right');
+  if (!file) return;
 
-      const coloredName = `<span class="username" style="color:${getColor(Name)}; font-weight:600;">You</span>: `;
-
-      if (file.type.startsWith('image/')) {
-        msgDiv.innerHTML = `${coloredName}<br><img src="${reader.result}" alt="${file.name}" style="width:150px; border-radius:10px;">`;
-      } else {
-        msgDiv.innerHTML = `${coloredName}<br><a href="${reader.result}" download="${file.name}" target="_blank">📎 ${file.name}</a>`;
-      }
-
-      if (file.type.startsWith('image/')) {
-        const img = document.createElement('img');
-        img.src = reader.result;
-        img.alt = file.name;
-        img.style.width = '150px';
-        img.style.borderRadius = '10px';
-        msgDiv.append(`You: `, img);
-      } else {
-        const fileLink = document.createElement('a');
-        fileLink.href = reader.result;
-        fileLink.download = file.name;
-        fileLink.textContent = `📎 You sent: ${file.name}`;
-        fileLink.target = '_blank';
-        msgDiv.appendChild(fileLink);
-      }
-
-      messageContainer.append(msgDiv);
-      messageContainer.scrollTop = messageContainer.scrollHeight;
-      audio.play();
-
-      // ✅ Send to others
-      socket.emit('file', fileData);
+  const reader = new FileReader();
+  reader.onload = () => {
+    const fileData = {
+      file: reader.result,
+      fileName: file.name,
+      fileType: file.type,
+      name: Name,
+      room: currentRoom
     };
-    reader.readAsDataURL(file);
-    fileInput.value = '';
-  }
+
+    // ✅ Show file immediately for sender
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('message', 'right');
+
+    const coloredName = `<span class="username" style="color:${getColor(Name)}; font-weight:600;">You</span>: `;
+
+    if (file.type.startsWith('image/')) {
+      msgDiv.innerHTML = `${coloredName}<br><img src="${reader.result}" alt="${file.name}" style="width:150px; border-radius:10px;">`;
+    } else {
+      msgDiv.innerHTML = `${coloredName}<br><a href="${reader.result}" download="${file.name}" target="_blank">📎 ${file.name}</a>`;
+    }
+
+    messageContainer.append(msgDiv);
+    messageContainer.scrollTop = messageContainer.scrollHeight;
+    audio.play();
+
+    // ✅ Send to others (don’t send to self again)
+    socket.emit('file', fileData);
+  };
+  reader.readAsDataURL(file);
+  fileInput.value = '';
 });
 
 // When receiving a file (image or other)
