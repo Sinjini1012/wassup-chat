@@ -4,7 +4,13 @@ let privateTarget = null;
 let inPrivateChat = false;
 
 const userColors = {};
-const socket = io();
+const socket = io("https://wassup-chat.onrender.com", {
+  reconnection: true,           // enable reconnection
+  reconnectionAttempts: 10,     // retry up to 10 times
+  reconnectionDelay: 1000,      // wait 1s between tries
+  timeout: 20000                // 20s timeout for connection
+});
+
 
 function getColor(name) {
   if (!userColors[name]) {
@@ -130,28 +136,50 @@ socket.on('file', data => {
     msgDiv.innerHTML = `${coloredName}<br><a href="${data.file}" download="${data.fileName}" target="_blank">📎 ${data.fileName}</a>`;
   }
 
-  // if it's an image
-  if (data.fileType.startsWith('image/')) {
-    const img = document.createElement('img');
-    img.src = data.file;
-    img.alt = data.fileName;
-    img.style.width = '150px';
-    img.style.borderRadius = '10px';
-    msgDiv.append(`${data.name}: `, img);
-  } else {
-    // non-image file
-    const fileLink = document.createElement('a');
-    fileLink.href = data.file;
-    fileLink.download = data.fileName;
-    fileLink.textContent = `📎 ${data.name} sent: ${data.fileName}`;
-    fileLink.target = '_blank';
-    msgDiv.appendChild(fileLink);
-  }
+  // // if it's an image
+  // if (data.fileType.startsWith('image/')) {
+  //   const img = document.createElement('img');
+  //   img.src = data.file;
+  //   img.alt = data.fileName;
+  //   img.style.width = '150px';
+  //   img.style.borderRadius = '10px';
+  //   msgDiv.append(`${data.name}: `, img);
+  // } else {
+  //   // non-image file
+  //   const fileLink = document.createElement('a');
+  //   fileLink.href = data.file;
+  //   fileLink.download = data.fileName;
+  //   fileLink.textContent = `📎 ${data.name} sent: ${data.fileName}`;
+  //   fileLink.target = '_blank';
+  //   msgDiv.appendChild(fileLink);
+  // }
 
   messageContainer.append(msgDiv);
   messageContainer.scrollTop = messageContainer.scrollHeight;
   audio.play();
 });
+
+// ✅ Reconnect logic
+socket.on("reconnect_attempt", () => {
+  console.log("🔁 Trying to reconnect...");
+});
+
+socket.on("reconnect", (attemptNumber) => {
+  console.log(`✅ Reconnected after ${attemptNumber} attempts`);
+  // Rejoin the chat automatically
+  if (Name && Room) {
+    socket.emit("new-user-joined", { name: Name, room: Room });
+  }
+});
+
+socket.on("reconnect_error", (error) => {
+  console.error("⚠️ Reconnect failed:", error);
+});
+
+socket.on("reconnect_failed", () => {
+  console.error("❌ Could not reconnect after several tries");
+});
+
 
 let currentRoom = 'general';
 const roomSelect = document.getElementById('room-select');

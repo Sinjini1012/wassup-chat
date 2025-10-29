@@ -92,14 +92,21 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    const user = users[socket.id];
-    if (user) {
-      console.log(`[SERVER] ${user.name} disconnected`);
-      socket.broadcast.to(user.room).emit("left", user.name);
-      delete users[socket.id];
-      io.emit("user-list", getAllUsers());
-    }
-  });
+  const user = users[socket.id];
+  if (user) {
+    console.log(`[SERVER] ${user.name} temporarily disconnected`);
+
+    // Delay marking user as left to allow reconnection
+    setTimeout(() => {
+      if (!io.sockets.sockets.get(socket.id)) {
+        console.log(`[SERVER] ${user.name} permanently left`);
+        socket.broadcast.to(user.room).emit("left", user.name);
+        delete users[socket.id];
+        io.emit("user-list", getAllUsers());
+      }
+    }, 5000); // 5 seconds grace period
+  }
+});
 });
 
 function getAllUsers() {
