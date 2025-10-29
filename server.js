@@ -25,23 +25,14 @@ const roomMessages = {};
 io.on("connection", (socket) => {
   console.log("[SERVER] A new client connected:", socket.id);
 
-  // socket.on("new-user-joined", (name) => {
-  //   users[socket.id] = { name, room: "general" };
-  //   socket.join("general");
-  //   console.log(`[SERVER] ${name} joined general`);
-  //   socket.emit("load-history", roomMessages["general"] || []);
-  //   socket.broadcast.to("general").emit("user-joined", name);
-  //   io.emit("user-list", getAllUsers());
-  // });
-
   socket.on("new-user-joined", (data) => {
-  const { name, clientId } = typeof data === "string" ? { name: data, clientId: socket.id } : data;
+  const { name, clientId } =
+    typeof data === "string" ? { name: data, clientId: socket.id } : data;
 
-  // Check if this user already exists (reconnection)
+  // ✅ Check if this user already exists (reconnection)
   const existingUser = Object.values(users).find(u => u.clientId === clientId);
 
   if (existingUser) {
-    // Reconnected user
     console.log(`[SERVER] ${name} reconnected with clientId ${clientId}`);
     existingUser.socketId = socket.id;
     users[socket.id] = existingUser;
@@ -51,7 +42,7 @@ io.on("connection", (socket) => {
     return;
   }
 
-  // New user
+  // ✅ New user
   users[socket.id] = { name, room: "general", clientId };
   socket.join("general");
   console.log(`[SERVER] ${name} joined general`);
@@ -59,7 +50,6 @@ io.on("connection", (socket) => {
   socket.broadcast.to("general").emit("user-joined", name);
   io.emit("user-list", getAllUsers());
 });
-
 
   socket.on("file", (data) => {
     const user = users[socket.id];
@@ -120,25 +110,36 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
   const user = users[socket.id];
-  if (user) {
-    console.log(`[SERVER] ${user.name} disconnected (checking for reconnection...)`);
-    setTimeout(() => {
-      // If no active socket has same clientId → real disconnect
-      const stillConnected = Object.values(users).some(u => u.clientId === user.clientId && u.socketId !== socket.id);
-      if (!stillConnected) {
-        console.log(`[SERVER] ${user.name} permanently left`);
-        socket.broadcast.to(user.room).emit("left", user.name);
-        delete users[socket.id];
-        io.emit("user-list", getAllUsers());
-      }
-    }, 8000); // 8s delay for mobile reconnect
-  }
+  if (!user) return;
+
+  console.log(`[SERVER] ${user.name} disconnected temporarily...`);
+  
+  // Wait to confirm if they reconnect
+  setTimeout(() => {
+    // If same clientId not connected again → mark as offline
+    const stillOnline = Object.values(users).some(u => u.clientId === user.clientId && u.socketId !== socket.id);
+    if (!stillOnline) {
+      console.log(`[SERVER] ${user.name} really left the chat.`);
+      socket.broadcast.to(user.room).emit("left", user.name);
+      delete users[socket.id];
+      io.emit("user-list", getAllUsers());
+    }
+  }, 8000); // 8 seconds grace time
 });
 });
 
 function getAllUsers() {
+  const seen = new Set();
   const list = [];
-  for (const id in users) list.push({ id, name: users[id].name });
+
+  for (const id in users) {
+    const { clientId, name } = users[id];
+    if (!seen.has(clientId)) {
+      seen.add(clientId);
+      list.push({ id, name });
+    }
+  }
+
   return list;
 }
 
