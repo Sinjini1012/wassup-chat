@@ -11,6 +11,12 @@ const socket = io("https://wassup-chat.onrender.com", {
   timeout: 20000                // 20s timeout for connection
 });
 
+// ✅ Persistent client ID across reconnects
+let clientId = localStorage.getItem("clientId");
+if (!clientId) {
+  clientId = "client_" + Math.random().toString(36).substr(2, 9);
+  localStorage.setItem("clientId", clientId);
+}
 
 function getColor(name) {
   if (!userColors[name]) {
@@ -33,7 +39,7 @@ joinBtn.addEventListener('click', () => {
   Name = usernameInput.value.trim();
   if (Name) {
     modal.style.display = 'none';
-    socket.emit('new-user-joined', Name);
+    socket.emit("new-user-joined", { name: Name, clientId });
   }
 });
 
