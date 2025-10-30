@@ -101,7 +101,7 @@ fileInput.addEventListener("change", (event) => {
   }
 
   console.log("✅ File selected:", file.name, file.type);
-  
+
   const reader = new FileReader();
   reader.onload = () => {
     console.log("✅ File loaded successfully");
@@ -139,7 +139,7 @@ fileInput.addEventListener("change", (event) => {
   };
 
   // ✅ Base64 encoding — universally supported
-  reader.readAsDataURL(fileCopy);
+  reader.readAsDataURL(file);
 
   // ✅ Clear input safely *after* small delay (mobile fix)
   setTimeout(() => {
