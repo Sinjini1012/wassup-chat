@@ -390,3 +390,8 @@ body:not(.dark-mode) .send {
   opacity: 0.8;
   margin: 5px 0;
 }
+
+.file-label {
+  cursor: pointer;
+  user-select: none;
+}
