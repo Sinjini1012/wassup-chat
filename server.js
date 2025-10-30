@@ -7,7 +7,8 @@ const path = require("path");
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: { origin: "*", methods: ["GET", "POST"] }
+  cors: { origin: "*", methods: ["GET", "POST"] },
+  maxHttpBufferSize: 10e7 // ✅ allows up to 100 MB per message
 });
 
 // ✅ Serve all static files (HTML, CSS, JS)
@@ -131,7 +132,6 @@ io.on("connection", (socket) => {
 function getAllUsers() {
   const seen = new Set();
   const list = [];
-
   for (const id in users) {
     const { clientId, name } = users[id];
     if (!seen.has(clientId)) {
@@ -139,7 +139,6 @@ function getAllUsers() {
       list.push({ id, name });
     }
   }
-
   return list;
 }
 

@@ -45,7 +45,8 @@
         <form action="#" id="send-container">
             <input type="text" name="messageInp" id="messageInp">
             <!-- <input type="file" id="imageInput" accept="image/*"> -->
-            <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.zip,.txt">
+            <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.zip,.txt" style="display: none;">
+            <label for="fileInput" class="file-label">📎 Send File</label>
             <button id="emoji-btn" type="button">😊</button>
             <div id="emoji-picker" style="display:none; position:absolute; bottom:70px; background:#fff; border:1px solid #ccc; padding:5px; border-radius:10px;"></div>
             <button class="btn" type="submit">Send</button>

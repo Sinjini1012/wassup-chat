@@ -124,8 +124,13 @@ fileInput.addEventListener('change', () => {
     // ✅ Send to others (don’t send to self again)
     socket.emit('file', fileData);
   };
-  reader.readAsDataURL(file);
-  fileInput.value = '';
+  // ✅ Base64 encoding — universally supported
+  reader.readAsDataURL(fileCopy);
+
+  // ✅ Clear input safely *after* small delay (mobile fix)
+  setTimeout(() => {
+    fileInput.value = "";
+  }, 500);
 });
 
 // When receiving a file (image or other)
@@ -185,7 +190,6 @@ socket.on("reconnect_error", (error) => {
 socket.on("reconnect_failed", () => {
   console.error("❌ Could not reconnect after several tries");
 });
-
 
 let currentRoom = 'general';
 const roomSelect = document.getElementById('room-select');
