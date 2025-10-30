@@ -144,7 +144,7 @@ fileInput.addEventListener("change", (event) => {
   // ✅ Clear input safely *after* small delay (mobile fix)
   setTimeout(() => {
     fileInput.value = "";
-  }, 800);
+  }, 8000);
 });
 
 // When receiving a file (image or other)
