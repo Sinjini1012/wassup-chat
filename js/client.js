@@ -91,12 +91,20 @@ const append = (message, position) => {
   if (position === 'left') audio.play();
 };
 
-fileInput.addEventListener('change', () => {
+const fileInput = document.getElementById("fileInput");
+fileInput.addEventListener("change", (event) => {
+  console.log("📁 File input triggered!");
   const file = fileInput.files[0];
-  if (!file) return;
+  if (!file) {
+    console.log("❌ No file selected");
+    return;
+  }
 
+  console.log("✅ File selected:", file.name, file.type);
+  
   const reader = new FileReader();
   reader.onload = () => {
+    console.log("✅ File loaded successfully");
     const fileData = {
       file: reader.result,
       fileName: file.name,
@@ -124,13 +132,19 @@ fileInput.addEventListener('change', () => {
     // ✅ Send to others (don’t send to self again)
     socket.emit('file', fileData);
   };
+
+  reader.onerror = (err) => {
+    console.error("❌ File read error:", err);
+    alert("File could not be read.");
+  };
+
   // ✅ Base64 encoding — universally supported
   reader.readAsDataURL(fileCopy);
 
   // ✅ Clear input safely *after* small delay (mobile fix)
   setTimeout(() => {
     fileInput.value = "";
-  }, 500);
+  }, 800);
 });
 
 // When receiving a file (image or other)
